@@ -3,21 +3,20 @@ package service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.ContactModel;
 
+import java.io.File;
 import java.io.IOException;
 
 public class SourceJsonFile {
 
-    public ContactModel sourceContactFile(){
-        ContactModel contactsFromJson;
         ObjectMapper mapper = new ObjectMapper();
-        try (var contactInputStream = ContactsService.class.getClassLoader().getResourceAsStream("jsonTest.json")) {
-            /*Reads data from inputStream and SnailsModel class*/
-
-            assert contactInputStream != null;
-            contactsFromJson = mapper.readValue(contactInputStream.readAllBytes(), ContactModel.class);
-
-        } catch (IOException ex) {
-            throw new RuntimeException("Can´t read the file 'jsonTest.json'", ex);
+        ContactModel contactsFromJson;
+    public ContactModel sourceContactFile() {
+            /*Reads data from inputStream and ContactModel class*/
+        try {
+            contactsFromJson = mapper.readValue(new File("C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\jsonContacts.json"), ContactModel.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Cant read json file");
         }
         return contactsFromJson;
     }
