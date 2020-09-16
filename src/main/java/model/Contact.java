@@ -2,8 +2,12 @@ package model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import service.SourceJsonFile;
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
+import java.util.ArrayList;
+import java.util.List;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Contact {
     private String contactName;
     private String contactSurname;
@@ -78,10 +82,18 @@ public class Contact {
         ContactPhoneNumbers = contactPhoneNumbers;
     }
 
+    public static List<Contact> deleteContactId(SourceJsonFile sourceJsonFile, String customerId) {
+        List<Contact> contactList = new ArrayList<>();
+        for (Contact contact : sourceJsonFile.sourceContactFile().getContactList()) {
+            if (!contact.getContactId().equals(customerId)) {
+                contactList.add(contact);
+            }
+        }
+        return contactList;
+    }
+
     @Override
     public String toString() {
-        StringBuilder contactDetails = new StringBuilder();
-        contactDetails.append(String.format("유 Name: %s \n  Surname: %s \n  Age: %s \n    ╦╣ Address: %s \n     ☏ Phone Numbers:%s", getContactName(), getContactSurname(), getContactAge(), getContactAddress(), getContactPhoneNumbers()));
-        return contactDetails.toString();
+        return String.format("유 Name: %s \n  Surname: %s \n  Age: %s \n    ╦╣ Address: %s \n     ☏ Phone Numbers:%s", getContactName(), getContactSurname(), getContactAge(), getContactAddress(), getContactPhoneNumbers());
     }
 }
