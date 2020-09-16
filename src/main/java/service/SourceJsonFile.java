@@ -8,10 +8,11 @@ import java.io.IOException;
 
 public class SourceJsonFile {
 
-        ObjectMapper mapper = new ObjectMapper();
-        ContactModel contactsFromJson;
+    ObjectMapper mapper = new ObjectMapper();
+    ContactModel contactsFromJson;
+
     public ContactModel sourceContactFile() {
-            /*Reads data from inputStream and ContactModel class*/
+        /*Reads data from inputStream and ContactModel class*/
         try {
             contactsFromJson = mapper.readValue(new File("C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\jsonContacts.json"), ContactModel.class);
         } catch (IOException e) {
