@@ -13,11 +13,9 @@ public class Ui {
 
     public static void showMainMenu() {
         try (Scanner scanner = new Scanner(System.in)) {
-            //Automatically capitalises first Letter
             String userInput = StringUtils.capitalise(scanner.nextLine());
             switch (userInput) {
                 case "1":
-
                     showContactList(scanner);
                     break;
 
@@ -47,6 +45,37 @@ public class Ui {
         }
     }
 
+    public static void showUI() {
+        System.out.println("   (-(-_(-_-)_-)-)");
+        String intro = "-- Contact Manager -- \n" + "1 = [ All Contacts ]\n" + "2 = [ Contacts Age ]\n" + "Exit = [ Exit ] \n" + "\n4 = [ Add Contact ] \n" + "5 = [ Delete Contact ]";
+        System.out.println(intro);
+        Ui.showMainMenu();
+    }
+
+    public static void showAddOrDeleteUi() throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        String intro = "\n What would you like to do next?\n" +
+                "- 1: [ Add Contact ]  - 2: [ Delete Contact ]\n"+
+                "- 3: [ Main Menu ]    - 4: [ Exit ]\n";
+        System.out.println(intro);
+        switch(scanner.nextLine()) {
+            case "1":
+                addContact();
+                break;
+            case "2":
+                deleteContact();
+                break;
+            case "3":
+                showUI();
+                break;
+            case "4":
+                System.exit(0);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + scanner.nextLine());
+        }
+    }
+
     public static void uiShowContactAge(SourceJsonFile sourceJsonFile, ContactModel newContact) {
         for (Contact ageOfContacts : sourceJsonFile.sourceContactFile().getContactList()) {
             if (newContact.getContactList() == null) {
@@ -69,16 +98,11 @@ public class Ui {
                 System.exit(0);
                 break;
             default:
-                throw new NoSuchElementException("Unexpected value: " + s.nextLine()
-                );
+                throw new NoSuchElementException("Unexpected value: " + s.nextLine());
         }
     }
 
-    public static void showUI() {
-        System.out.println("   (-(-_(-_-)_-)-)");
-        String intro = "-- Contact Manager -- \n" + "1 = [ All Contacts ]\n" + "2 = [ Contacts Age ]\n" + "Exit = [ Exit ] \n" + "\n4 = [ Add Contact ] \n" + "5 = [ Delete Contact ]";
-        System.out.println(intro);
-        Ui.showMainMenu();
-    }
+
+
 
 }
