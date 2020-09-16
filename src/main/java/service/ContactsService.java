@@ -8,19 +8,15 @@ import org.codehaus.plexus.util.StringUtils;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static model.Ui.showExit;
 import static model.Ui.showUI;
 
 public class ContactsService extends RemoveNonChar {
-    public ContactModel newContact = new ContactModel();
-    ObjectMapper mapper = new ObjectMapper();
-    String jsonFilePath = "C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\jsonTest.json";
 
-
-    //Reads the JSON file
-    //Ui method
     public static void showContactList(Scanner scanner) {
         SourceJsonFile sourceJsonFile = new SourceJsonFile();
         ContactModel newContact = sourceJsonFile.sourceContactFile();
@@ -35,15 +31,12 @@ public class ContactsService extends RemoveNonChar {
 
     public static void showContactListAge(Scanner scanner) {
         SourceJsonFile sourceJsonFile = new SourceJsonFile();
-        ContactModel newContact = new ContactModel();
-        for(Contact ageOfContacts : sourceJsonFile.sourceContactFile().getContactList()){
-            if (newContact.getContactList() == null){
-                System.out.println("There are no contacts available");
-            }
-            System.out.println("| Contact Name: " + ageOfContacts.getContactName() + "\n  Age: " + ageOfContacts.getContactAge() + "\n------|");
-        }
+        ContactModel newContact = sourceJsonFile.sourceContactFile();
+        //Ui logic
+        Ui.uiShowContactAge(sourceJsonFile, newContact);
         showExit(scanner);
     }
+
 
     public static void showAddOrDeleteUi() throws IOException {
         Scanner scanner = new Scanner(System.in);
@@ -70,13 +63,11 @@ public class ContactsService extends RemoveNonChar {
     }
 
 
-
-    //User adds contact co ContactModel
-    public static void addContact() throws IOException {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
+    public static void addContact(){
             SourceJsonFile sourceJsonFile = new SourceJsonFile();
             ContactModel newContact = sourceJsonFile.sourceContactFile();
+            ObjectMapper mapper = new ObjectMapper();
+        try {
             var scanner = new Scanner(System.in);
             System.out.println("( ͡° ͜ʖ ͡°) Please insert the details required to add a new contact\n");
             System.out.println("유 Name");
@@ -88,7 +79,7 @@ public class ContactsService extends RemoveNonChar {
             }
             //Add Contact surname
             System.out.println("유 Surname");
-            String addSurname = StringUtils.capitalise(removeNonAlphabetChars(scanner.nextLine()));
+            var addSurname = StringUtils.capitalise(removeNonAlphabetChars(scanner.nextLine()));
             while(addSurname.isBlank()){
                 System.out.println("You may not continue without a Surname for new contact");
                 addSurname = StringUtils.capitalise(removeNonAlphabetChars(scanner.nextLine()));
@@ -123,7 +114,7 @@ public class ContactsService extends RemoveNonChar {
 
             Address contactAddress = new Address(addStreetName, addHouseNumber, addPostCode, addCity);
             PhoneNumbers contactPhone = new PhoneNumbers(addHomePhone, addMobilePhone);
-            JsonNode jsonNode = mapper.readTree(new FileReader("C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\jsonTest.json"));
+            JsonNode jsonNode = mapper.readTree(new FileReader("C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\jsonContacts.json"));
             String id = Integer.toString(jsonNode.get("contactList").size());
             Contact contact = new Contact(addName, addSurname, addContactAge, contactAddress, contactPhone, id);
             System.out.println("\nConfirm details »»--------►\n" + contact);
@@ -132,12 +123,10 @@ public class ContactsService extends RemoveNonChar {
             switch (scanner.nextLine()){
                 case "1":
                     newContact.addToContactList(contact);
-                    mapper.writeValue(new File("C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\jsonTest.json"), newContact);
+                    mapper.writeValue(new File("C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\jsonContacts.json"), newContact);
                     System.out.println("\n(¯`·._.· " + contact.getContactName() + " " + contact.getContactSurname() + " Added ·._.·´¯)\n");
-                    // todo check why the contact is saved only when program restarts
                     showAddOrDeleteUi();
                     break;
-
                 case "2":
                     newContact.deleteFromContactList(contact);
                     System.out.println("Progress has not been saved");
@@ -149,12 +138,11 @@ public class ContactsService extends RemoveNonChar {
         }
     }
 
-    // todo add deleteFunction to static method
     public static void deleteContact() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         SourceJsonFile sourceJsonFile = new SourceJsonFile();
-        ContactModel newContact = sourceJsonFile.sourceContactFile();
-        if(newContact.getContactList().isEmpty()){
+        ContactModel contactsInJsonFile = sourceJsonFile.sourceContactFile();
+        if(contactsInJsonFile.getContactList().isEmpty()){
             System.out.println("there are no contacts to delete");
             showAddOrDeleteUi();
             return;
@@ -167,20 +155,17 @@ public class ContactsService extends RemoveNonChar {
             System.out.println("Incorrect data, num ID required to proceed with contact removal.");
             customerId = removeAlphabetChars(scanner.nextLine());
         }
-        for (Contact contact : sourceJsonFile.sourceContactFile().getContactList())
-            if (contact.getContactId().equals(customerId)) {
-                newContact.deleteFromContactList(contact);
-                mapper.writeValue(new File("C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\jsonTest.json"), newContact);
-                System.out.println("Contact " + customerId + " Deleted!");
-                showExit(scanner);
-                break;
-            }else if(!contact.getContactId().equals(customerId)) {
-                System.out.println("No match found to delete");
-                showExit(scanner);
+
+        List<Contact> contactList = new ArrayList<>();
+        for (Contact contact : sourceJsonFile.sourceContactFile().getContactList()) {
+            if (!contact.getContactId().equals(customerId)) {
+                contactList.add(contact);
             }
+        }
+        contactsInJsonFile.setContactList(contactList);
+        mapper.writeValue(new File("C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\jsonContacts.json"), contactsInJsonFile);
+        System.out.println("Contact " + customerId + " Deleted!");
+        showExit(scanner);
     }
-
-    //First menu Users can see
-
 }
 

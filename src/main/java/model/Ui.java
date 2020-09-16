@@ -1,6 +1,7 @@
 package model;
 
 import org.codehaus.plexus.util.StringUtils;
+import service.SourceJsonFile;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -43,6 +44,15 @@ public class Ui {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void uiShowContactAge(SourceJsonFile sourceJsonFile, ContactModel newContact) {
+        for (Contact ageOfContacts : sourceJsonFile.sourceContactFile().getContactList()) {
+            if (newContact.getContactList() == null) {
+                System.out.println("There are no contacts available");
+            }
+            System.out.println("| Contact Name: " + ageOfContacts.getContactName() + "\n  Age: " + ageOfContacts.getContactAge() + "\n------|");
         }
     }
 
