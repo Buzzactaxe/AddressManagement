@@ -1,13 +1,10 @@
 package model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.codehaus.plexus.util.StringUtils;
-import org.jetbrains.annotations.Nullable;
 import service.ContactsService;
 import service.RemoveNonChar;
 import service.SourceJsonFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -39,7 +36,7 @@ public class Ui {
                     break;
 
                 case "5":
-                    deleteContact();
+                    deleteContactUi();
                     break;
                 default:
                     showUI();
@@ -71,7 +68,7 @@ public class Ui {
                 addContactUi();
                 break;
             case "2":
-                deleteContact();
+                deleteContactUi();
                 break;
             case "3":
                 showUI();
@@ -125,30 +122,7 @@ public class Ui {
                 throw new NoSuchElementException("Unexpected value: " + s.nextLine());
         }
     }
-
-    public static Scanner deleteContactUi(SourceJsonFile sourceJson) throws IOException {
-        @Nullable Scanner result = null;
-        ObjectMapper mapper = new ObjectMapper();
-        ContactModel newContact = new ContactModel();
-        if (!newContact.getContactList().isEmpty()) {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Enter  ID of Contact you want to delete");
-            System.out.println("Please Enter integer numbers");
-            String customerId = removeAlphabetChars(scanner.nextLine());
-            while (customerId.isBlank()) {
-                System.out.println("Incorrect data, num ID required to proceed with contact removal.");
-                customerId = removeAlphabetChars(scanner.nextLine());
-            }
-            ContactsService.deleteIdFromList(mapper, sourceJson, newContact, customerId);
-            System.out.println("Contact " + customerId + " Deleted!");
-            result = scanner;
-        } else {
-            System.out.println("Contact List is empty");
-            showAddOrDeleteUi();
-        }
-        return result;
-    }
-
+    //WORKING
     public static void addContactUi() throws IOException {
         var scanner = new Scanner(System.in);
         System.out.println("( ͡° ͜ʖ ͡°) Please insert the details required to add a new contact\n");
@@ -196,7 +170,7 @@ public class Ui {
 
         Address contactAddress = new Address(addStreetName, addHouseNumber, addPostCode, addCity);
         PhoneNumbers contactPhone = new PhoneNumbers(addHomePhone, addMobilePhone);
-        var id = getContactId();
+        var id = findCurrentContactId();
         Contact contact = new Contact(addName, addSurname, addContactAge, contactAddress, contactPhone, id);
         System.out.println("\nConfirm details »»--------►\n" + contact);
         System.out.println("\n- 1: [ Add Contact]\n- 2: [ Cancel operation ]");
@@ -230,9 +204,9 @@ public class Ui {
         }
     }
 
-    public static Scanner showContactId(ObjectMapper mapper, SourceJsonFile sourceJson, ContactModel contactsInJson) throws IOException {
-        @Nullable Scanner result = null;
-        if (!contactsInJson.getContactList().isEmpty()) {
+    //WORKING
+    public static void deleteContactUi() throws IOException {
+        if (!ContactsService.findContactList().isEmpty()) {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter  ID of Contact you want to delete");
             System.out.println("Please Enter integer numbers");
@@ -241,16 +215,11 @@ public class Ui {
                 System.out.println("Incorrect data, num ID required to proceed with contact removal.");
                 customerId = removeAlphabetChars(scanner.nextLine());
             }
-            var contactList = Contact.deleteContactId(sourceJson, customerId);
-            contactsInJson.setContactList(contactList);
-            mapper.writeValue(new File("C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\jsonContacts.json"), contactsInJson);
+            ContactsService.deleteIdFromList(customerId);
             System.out.println("Contact " + customerId + " Deleted!");
-            result = scanner;
         } else {
             System.out.println("Contact List is empty");
-            Ui.showAddOrDeleteUi();
         }
-        return result;
+        showAddOrDeleteUi();
     }
-
 }
