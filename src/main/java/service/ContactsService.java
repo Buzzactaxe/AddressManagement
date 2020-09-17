@@ -1,5 +1,6 @@
 package service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.Contact;
 import model.ContactModel;
@@ -19,7 +20,9 @@ public class ContactsService extends RemoveNonChar {
         Ui.showContactAge(sourceJsonFile, newContact);
         showExit(scanner);
     }
+
     //Adds contact from Ui to database
+    //DONE!
     public static void addContactToDatabase(Contact contact) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         SourceJsonFile sourceJsonFile = new SourceJsonFile();
@@ -28,22 +31,19 @@ public class ContactsService extends RemoveNonChar {
         SourceJsonFile.writeToJson(newContact, mapper);
     }
 
-    // TODO: 17/09/2020 remove Ui
-    public static void deleteContact() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        SourceJsonFile sourceJsonFile = new SourceJsonFile();
-        ContactModel contactsInJsonFile = sourceJsonFile.sourceContactFile();
-        Scanner scanner = Ui.showContactId(mapper, sourceJsonFile, contactsInJsonFile);
-        if (scanner == null) return;
-        showExit(scanner);
-    }
-
-    public static String findContactId() throws IOException {
+    public static String findCurrentContactId() throws IOException {
         return Integer.toString(SourceJsonFile.getJsonNode().get("contactList").size());
     }
 
-    public static void deleteIdFromList(ObjectMapper mapper, SourceJsonFile sourceJson, ContactModel newContact, String customerId) throws IOException {
-        var contactList = Contact.deleteContactId(sourceJson, customerId);
+    public static JsonNode findContactList() throws IOException {
+        return SourceJsonFile.findJsonList();
+    }
+
+    public static void deleteIdFromList(String customerId) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        SourceJsonFile sourceJsonFile = new SourceJsonFile();
+        var contactList = Contact.deleteContactId(customerId);
+        ContactModel newContact = sourceJsonFile.sourceContactFile();
         newContact.setContactList(contactList);
         SourceJsonFile.writeToJson(newContact, mapper);
     }
