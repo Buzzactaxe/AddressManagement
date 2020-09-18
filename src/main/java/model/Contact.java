@@ -2,10 +2,6 @@ package model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import service.SourceJsonFile;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Contact {
@@ -17,8 +13,8 @@ public class Contact {
     private PhoneNumbers ContactPhoneNumbers;
 
     public Contact(@JsonProperty("name") String contactName,
-                   @JsonProperty("surname")String contactSurname,
-                   @JsonProperty("age")String contactAge,
+                   @JsonProperty("surname") String contactSurname,
+                   @JsonProperty("age") String contactAge,
                    @JsonProperty("address") Address contactAddress,
                    @JsonProperty("phoneNumbers") PhoneNumbers contactPhoneNumbers,
                    @JsonProperty("contactId") String contactId) {
@@ -34,7 +30,7 @@ public class Contact {
         return contactAge;
     }
 
-    public void printContactId(){
+    public void printContactId() {
         System.out.println(this.contactId);
     }
 
@@ -46,9 +42,9 @@ public class Contact {
         return contactId;
     }
 
-    public void setCustomerID(String contactId ) {
+    public void setCustomerID(String contactId) {
         this.contactId = contactId;
-        }
+    }
 
     public String getContactName() {
         return contactName;
@@ -82,15 +78,7 @@ public class Contact {
         ContactPhoneNumbers = contactPhoneNumbers;
     }
 
-    public static List<Contact> deleteContactId(SourceJsonFile sourceJsonFile, String customerId) {
-        List<Contact> contactList = new ArrayList<>();
-        for (Contact contact : sourceJsonFile.sourceContactFile().getContactList()) {
-            if (!contact.getContactId().equals(customerId)) {
-                contactList.add(contact);
-            }
-        }
-        return contactList;
-    }
+
 
     @Override
     public String toString() {
