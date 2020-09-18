@@ -3,7 +3,7 @@ package model;
 import org.codehaus.plexus.util.StringUtils;
 import service.ContactsService;
 import service.RemoveNonChar;
-import service.SourceJsonFile;
+import service.ContactDao;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -13,17 +13,17 @@ import static service.ContactsService.*;
 
 public class Ui {
 
-    public static void showMainMenu() {
+    public static void showMainMenuUi() {
         try (Scanner scanner = new Scanner(System.in)) {
             String userInput = StringUtils.capitalise(scanner.nextLine());
             switch (userInput) {
                 case "1":
-                    showContactList(scanner);
+                    showContactListUi(scanner);
                     break;
 
                 case "2":
                     showContactListAge(scanner);
-                    showExit(scanner);
+                    showExitUi(scanner);
                     break;
 
                 case "Exit":
@@ -49,19 +49,19 @@ public class Ui {
 
     public static void showUI() {
         System.out.println(
-                "┌───── •✧✧• ─────┐\n" +
+                        "┌───── •✧✧• ─────┐\n" +
                         " -Contact Manager- \n" +
                         "└───── •✧✧• ─────┘");
         String intro = "\n" + "1 = [ All Contacts ]\n" + "2 = [ Contacts Age ]\n" + "Exit = [ Exit ] \n" + "\n4 = [ Add Contact ] \n" + "5 = [ Delete Contact ]";
         System.out.println(intro);
-        Ui.showMainMenu();
+        Ui.showMainMenuUi();
     }
 
     public static void showAddOrDeleteUi() throws IOException {
         Scanner scanner = new Scanner(System.in);
         String intro = "\n What would you like to do next?\n" +
-                "- 1: [ Add Contact ]  - 2: [ Delete Contact ]\n" +
-                "- 3: [ Main Menu ]    - 4: [ Exit ]\n";
+                "- 1: [ Add Contact ]     - 2: [ Delete Contact ]\n" +
+                "- 3: [ Show Contacts ]   - 4: [ Main Menu ]\n\n- 5: [ Exit ]\n";
         System.out.println(intro);
         switch (scanner.nextLine()) {
             case "1":
@@ -71,21 +71,23 @@ public class Ui {
                 deleteContactUi();
                 break;
             case "3":
-                showUI();
+                showContactListUi(scanner);
                 break;
             case "4":
+                showUI();
+                break;
+            case "5":
                 System.exit(0);
                 break;
             default:
                 System.out.println("༼ つ ◕_◕ ༽つ You left the project, Goodbye!!");
                 throw new IllegalStateException("Unexpected value: " + scanner.nextLine());
-
         }
     }
 
-    public static void showContactList(Scanner scanner) {
-        SourceJsonFile sourceJsonFile = new SourceJsonFile();
-        ContactModel newContact = sourceJsonFile.sourceContactFile();
+    public static void showContactListUi(Scanner scanner) {
+        ContactDao contactDAO = new ContactDao();
+        ContactModel newContact = contactDAO.readJsonDao();
         for (Contact contact : newContact.getContactList()) {
             if (newContact.getContactList() == null) {
                 System.out.println("There are no contacts available");
@@ -93,11 +95,11 @@ public class Ui {
             }
             System.out.println("| Contact ID: " + contact.getContactId() + "\n" + contact.toString() + "\n------|");
         }
-        showExit(scanner);
+        showExitUi(scanner);
     }
 
-    public static void showContactAge(SourceJsonFile sourceJsonFile, ContactModel newContact) {
-        for (Contact ageOfContacts : sourceJsonFile.sourceContactFile().getContactList()) {
+    public static void showContactAge(ContactDao contactDAO, ContactModel newContact) {
+        for (Contact ageOfContacts : contactDAO.readJsonDao().getContactList()) {
             if (newContact.getContactList() == null) {
                 System.out.println("There are no contacts available");
             }
@@ -105,7 +107,7 @@ public class Ui {
         }
     }
 
-    public static void showExit(Scanner s) throws NoSuchElementException {
+    public static void showExitUi(Scanner s) throws NoSuchElementException {
         Scanner input = new Scanner(System.in);
         System.out.println("\nDo you want to go back to the main menu?\n1 = [ Main Menu ] 2 = [ Exits Program ] ");
         String inputUser = input.nextLine().toUpperCase();
@@ -122,6 +124,7 @@ public class Ui {
                 throw new NoSuchElementException("Unexpected value: " + s.nextLine());
         }
     }
+
     //WORKING
     public static void addContactUi() throws IOException {
         var scanner = new Scanner(System.in);
@@ -194,7 +197,8 @@ public class Ui {
                                 "░█▒▒▒███████████▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██░░░\n" +
                                 "░██▒▒▒▒▒▒▒▒▒▒████▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒█░░░░░\n" +
                                 "░░████████████░░░█████████████████░░░░░░" +
-                                "\n(¯`·._.· " + contact.getContactName() + " " + contact.getContactSurname() + " Added ·._.·´¯)");
+
+                                "\n(¯`·._.· " + contact.getContactName().toUpperCase() + " " + contact.getContactSurname().toUpperCase() + " WS ADDED ·._.·´¯)");
                 Ui.showAddOrDeleteUi();
                 break;
             case "2":
@@ -210,7 +214,7 @@ public class Ui {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter  ID of Contact you want to delete");
             System.out.println("Please Enter integer numbers");
-            String customerId = removeAlphabetChars(scanner.nextLine());
+            var customerId = removeAlphabetChars(scanner.nextLine());
             while (customerId.isBlank()) {
                 System.out.println("Incorrect data, num ID required to proceed with contact removal.");
                 customerId = removeAlphabetChars(scanner.nextLine());
