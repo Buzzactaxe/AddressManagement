@@ -1,7 +1,7 @@
 package model;
 
 import org.codehaus.plexus.util.StringUtils;
-import service.ContactsService;
+import service.ContactService;
 import service.RemoveNonChar;
 import service.ContactDao;
 
@@ -9,11 +9,33 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import static service.ContactsService.*;
+import static service.ContactService.*;
 
 public class Ui {
+    //Giving null will not load until it is needed
+    private static Ui instance = null;
+
+    //Constructor for Singleton Pattern
+    private Ui() {
+    }
+
+    //Instance will load only when needed
+    public static Ui getInstance() {
+        if (instance == null) instance = new Ui();
+        return instance;
+    }
+
+    public static void getUiMenu() {
+        showMainMenuUi();
+    }
 
     public static void showMainMenuUi() {
+        System.out.println(
+                "┌───── •✧✧• ─────┐\n" +
+                        " -Contact Manager- \n" +
+                        "└───── •✧✧• ─────┘");
+        String intro = "\n" + "1 = [ All Contacts ]\n" + "2 = [ Contacts Age ]\n" + "Exit = [ Exit ] \n" + "\n4 = [ Add Contact ] \n" + "5 = [ Delete Contact ]";
+        System.out.println(intro);
         try (Scanner scanner = new Scanner(System.in)) {
             String userInput = StringUtils.capitalise(scanner.nextLine());
             switch (userInput) {
@@ -22,8 +44,7 @@ public class Ui {
                     break;
 
                 case "2":
-                    showContactListAge(scanner);
-                    showExitUi(scanner);
+                    showContactAgeUi(scanner);
                     break;
 
                 case "Exit":
@@ -39,7 +60,7 @@ public class Ui {
                     deleteContactUi();
                     break;
                 default:
-                    showUI();
+                    getUiMenu();
                     break;
             }
         } catch (IOException e) {
@@ -47,15 +68,6 @@ public class Ui {
         }
     }
 
-    public static void showUI() {
-        System.out.println(
-                        "┌───── •✧✧• ─────┐\n" +
-                        " -Contact Manager- \n" +
-                        "└───── •✧✧• ─────┘");
-        String intro = "\n" + "1 = [ All Contacts ]\n" + "2 = [ Contacts Age ]\n" + "Exit = [ Exit ] \n" + "\n4 = [ Add Contact ] \n" + "5 = [ Delete Contact ]";
-        System.out.println(intro);
-        Ui.showMainMenuUi();
-    }
 
     public static void showAddOrDeleteUi() throws IOException {
         Scanner scanner = new Scanner(System.in);
@@ -74,7 +86,7 @@ public class Ui {
                 showContactListUi(scanner);
                 break;
             case "4":
-                showUI();
+                getUiMenu();
                 break;
             case "5":
                 System.exit(0);
@@ -85,26 +97,30 @@ public class Ui {
         }
     }
 
+    //Working on now
     public static void showContactListUi(Scanner scanner) {
-        ContactDao contactDAO = new ContactDao();
-        ContactModel newContact = contactDAO.readJsonDao();
-        for (Contact contact : newContact.getContactList()) {
+        ContactDao contactDao = ContactDao.getContactDoa();
+        ContactModel newContact = contactDao.readJsonDao();
+        for (Contact contact : contactDao.readJsonDao().getContactList())
             if (newContact.getContactList() == null) {
                 System.out.println("There are no contacts available");
                 break;
+            } else {
+                System.out.println("| Contact ID: " + contact.getContactId() + "\n" + contact.toString() + "\n------|");
             }
-            System.out.println("| Contact ID: " + contact.getContactId() + "\n" + contact.toString() + "\n------|");
-        }
         showExitUi(scanner);
     }
 
-    public static void showContactAge(ContactDao contactDAO, ContactModel newContact) {
-        for (Contact ageOfContacts : contactDAO.readJsonDao().getContactList()) {
+    public static void showContactAgeUi(Scanner scanner) {
+        ContactDao contactDao = ContactDao.getContactDoa();
+        ContactModel newContact = contactDao.readJsonDao();
+        for (Contact ageOfContacts : contactDao.readJsonDao().getContactList()) {
             if (newContact.getContactList() == null) {
                 System.out.println("There are no contacts available");
             }
             System.out.println("| Contact Name: " + ageOfContacts.getContactName() + "\n  Age: " + ageOfContacts.getContactAge() + "\n------|");
         }
+        showExitUi(scanner);
     }
 
     public static void showExitUi(Scanner s) throws NoSuchElementException {
@@ -113,7 +129,7 @@ public class Ui {
         String inputUser = input.nextLine().toUpperCase();
         switch (inputUser) {
             case "1":
-                showUI();
+                getUiMenu();
                 break;
             case "2":
                 System.out.println("༼ つ ◕_◕ ༽つ You are out of the project, Goodbye!!");
@@ -127,6 +143,8 @@ public class Ui {
 
     //WORKING
     public static void addContactUi() throws IOException {
+        ContactService contactService = ContactService.getInstance();
+
         var scanner = new Scanner(System.in);
         System.out.println("( ͡° ͜ʖ ͡°) Please insert the details required to add a new contact\n");
         System.out.println("유 Name");
@@ -173,14 +191,14 @@ public class Ui {
 
         Address contactAddress = new Address(addStreetName, addHouseNumber, addPostCode, addCity);
         PhoneNumbers contactPhone = new PhoneNumbers(addHomePhone, addMobilePhone);
-        var id = findCurrentContactId();
+        var id = contactService.findCurrentContactId();
         Contact contact = new Contact(addName, addSurname, addContactAge, contactAddress, contactPhone, id);
         System.out.println("\nConfirm details »»--------►\n" + contact);
         System.out.println("\n- 1: [ Add Contact]\n- 2: [ Cancel operation ]");
         System.out.println(contact.getContactId());
         switch (scanner.nextLine()) {
             case "1":
-                ContactsService.addContactToDatabase(contact);
+                ContactService.addContactToDatabase(contact);
                 System.out.println(
                         "\n░░░░░░░░░░░░░░░░░░░░░░█████████░░░░░░░░░\n" +
                                 "░░███████░░░░░░░░░░███▒▒▒▒▒▒▒▒███░░░░░░░\n" +
@@ -198,19 +216,19 @@ public class Ui {
                                 "░██▒▒▒▒▒▒▒▒▒▒████▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒█░░░░░\n" +
                                 "░░████████████░░░█████████████████░░░░░░" +
 
-                                "\n(¯`·._.· " + contact.getContactName().toUpperCase() + " " + contact.getContactSurname().toUpperCase() + " WS ADDED ·._.·´¯)");
-                Ui.showAddOrDeleteUi();
+                                "\n(¯`·._.· " + contact.getContactName().toUpperCase() + " " + contact.getContactSurname().toUpperCase() + " WAS ADDED ·._.·´¯)");
+                showAddOrDeleteUi();
                 break;
             case "2":
                 System.out.println("Progress has not been saved");
-                showUI();
+                getUiMenu();
                 break;
         }
     }
 
     //WORKING
     public static void deleteContactUi() throws IOException {
-        if (!ContactsService.findContactList().isEmpty()) {
+        if (!ContactService.findContactList().isEmpty()) {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter  ID of Contact you want to delete");
             System.out.println("Please Enter integer numbers");
@@ -219,7 +237,7 @@ public class Ui {
                 System.out.println("Incorrect data, num ID required to proceed with contact removal.");
                 customerId = removeAlphabetChars(scanner.nextLine());
             }
-            ContactsService.deleteIdFromList(customerId);
+            ContactService.deleteIdFromList(customerId);
             System.out.println("Contact " + customerId + " Deleted!");
         } else {
             System.out.println("Contact List is empty");

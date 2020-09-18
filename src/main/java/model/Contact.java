@@ -79,7 +79,6 @@ public class Contact {
     }
 
 
-
     @Override
     public String toString() {
         return String.format("유 Name: %s \n  Surname: %s \n  Age: %s \n    ╦╣ Address: %s \n     ☏ Phone Numbers:%s", getContactName(), getContactSurname(), getContactAge(), getContactAddress(), getContactPhoneNumbers());

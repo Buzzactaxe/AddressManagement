@@ -12,6 +12,16 @@ public class ContactDao {
 
     ObjectMapper mapper = new ObjectMapper();
     ContactModel contactsFromJson;
+    //Instance will load only when needed
+    private static ContactDao instance = null;
+
+    private ContactDao() {
+    }
+
+    public static ContactDao getContactDoa() {
+        if (instance == null) instance = new ContactDao();
+        return instance;
+    }
 
     //Reads data from inputStream and connects to class
     public ContactModel readJsonDao() {
