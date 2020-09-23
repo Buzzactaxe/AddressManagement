@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class ContactDao {
+    public static String CONTACTS_JSON = "C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\contactList_jackson.json";
 
     ObjectMapper mapper = new ObjectMapper();
     ContactModel contactsFromJson;
@@ -26,7 +27,7 @@ public class ContactDao {
     //Reads data from inputStream and connects to class
     public ContactModel readJsonDao() {
         try {
-            contactsFromJson = mapper.readValue(new File("C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\jsonContacts.json"), ContactModel.class);
+            contactsFromJson = mapper.readValue(new File(CONTACTS_JSON), ContactModel.class);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Cant read json file");
@@ -36,11 +37,11 @@ public class ContactDao {
 
     public static JsonNode getJsonObject() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readTree(new FileReader("C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\jsonContacts.json"));
+        return mapper.readTree(new FileReader(CONTACTS_JSON));
     }
 
     public static void writeToJson(ContactModel newContact, ObjectMapper mapper) throws IOException {
-        mapper.writeValue(new File("C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\jsonContacts.json"), newContact);
+        mapper.writeValue(new File(CONTACTS_JSON), newContact);
     }
 
 
