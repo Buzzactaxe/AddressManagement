@@ -1,6 +1,5 @@
 package service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import model.Contact;
 import model.ContactModel;
 
@@ -20,47 +19,26 @@ public class ContactService extends RemoveNonChar {
         if (instance == null) instance = new ContactService();
         return instance;
     }
-//    public void setFileManager(String i){
-//        Scanner scanner = new Scanner(System.in);
-//        System.out.println("1 = Json Program \n 2 = Exit");
-//        switch (scanner.nextLine()) {
-//            case "1":
-//                ifm = new JsonContactDao();
-//
-//                break;
-//            case "2":
-//                System.out.println("Nothing");
-//                System.exit(0);
-//                break;
-//
-//        }
-//    }
 
-
-    // TODO: 25/09/2020
     public void setInterfaceType(int i) {
         switch (i) {
             case 1:
-                ifm = new JsonContactDao();
+                ifm = new JsonDao();
                 break;
             case 2:
-                System.out.println("Nothing");
+                // TODO Add xml when implemented
+                System.out.println("Program in XL will come here");
+                break;
+            case 3:
+                System.out.println("Nothing, your out");
                 System.exit(0);
                 break;
+            default:
+                System.exit(0);
         }
     }
 
     //Adds contact from Ui to database
-    //DONE!
-//    public static void addContactToDatabase(Contact contact) throws IOException {
-//        ObjectMapper mapper = new ObjectMapper();
-//        //use interface DAO instead of static
-//        ifm.getDao();
-//        ContactModel newContact = ifm.read();
-//        //ContactModel newContact = XmlContactDao.convertJavaObjectToXml();
-//        newContact.addToContactList(contact);
-//        JsonContactDao.writeToJson(newContact, mapper);
-//    }
     public void addContact(Contact contact) throws IOException {
         ContactModel newContact = ifm.readFile();
         newContact.addToContactList(contact);
@@ -71,8 +49,12 @@ public class ContactService extends RemoveNonChar {
         return ifm.findId();
     }
 
-    public JsonNode findContactList() throws IOException {
-        return ifm.getFileData().get("contactList");
+    public void getContactList() {
+        ifm.getAllContacts();
+    }
+
+    public void showContactAgeList() {
+        ifm.getAllContactAge();
     }
 
     public void deleteIdFromList(String customerId) throws IOException {
@@ -84,8 +66,7 @@ public class ContactService extends RemoveNonChar {
 
     public List<Contact> deleteContactId(String customerId) {
         List<Contact> contactList = new ArrayList<>();
-        JsonContactDao jsonContactDao = JsonContactDao.getDao();
-        for (Contact contact : jsonContactDao.readFile().getContactList()) {
+        for (Contact contact : ifm.readFile().getContactList()) {
             if (!contact.getContactId().equals(customerId)) {
                 contactList.add(contact);
             }

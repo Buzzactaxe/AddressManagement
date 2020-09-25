@@ -8,7 +8,7 @@ public class RemoveNonChar {
      * removes all non alphabetical characters from string
      *
      * @param userInput
-     * @return
+     *
      */
     public static String removeNonAlphabetChars(String userInput) {
         String availableChars = "1234567890.-/_";
@@ -18,7 +18,7 @@ public class RemoveNonChar {
                 output.append(c);
             }
         }
-      return StringUtils.capitalize(output.toString());
+        return StringUtils.capitalize(output.toString());
     }
 
     //removes alphabetical letters from user input

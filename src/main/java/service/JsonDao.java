@@ -9,19 +9,19 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class JsonContactDao implements IFileManager {
+public class JsonDao implements IFileManager {
     public static final String CONTACTS_JSON = "C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\contactList_jackson.json";
 
     ObjectMapper mapper = new ObjectMapper();
     ContactModel contactsFromJson;
     //Instance will load only when needed
-    private static JsonContactDao instance = null;
+    private static JsonDao instance = null;
 
-    JsonContactDao() {
+    JsonDao() {
     }
 
-    public static JsonContactDao getDao() {
-        if (instance == null) instance = new JsonContactDao();
+    public static JsonDao getDao() {
+        if (instance == null) instance = new JsonDao();
         return instance;
     }
 
@@ -43,22 +43,40 @@ public class JsonContactDao implements IFileManager {
     }
 
     @Override
+    public void getAllContacts() {
+        for (Contact contact : readFile().getContactList())
+            if (contactsFromJson.getContactList().isEmpty()) {
+                System.out.println("There are no contacts available");
+                break;
+            } else {
+                System.out.println("| Contact ID: " + contact.getContactId() + "\n" + contact.toString() + "\n------|");
+            }
+    }
+
+    @Override
+    public void getAllContactAge() {
+        for (Contact ageOfContacts : readFile().getContactList()) {
+            if (contactsFromJson.getContactList() == null) {
+                System.out.println("There are no contacts available");
+            }
+            System.out.println("| Contact Name: " + ageOfContacts.getContactName() + "\n  Age: " + ageOfContacts.getContactAge() + "\n------|");
+        }
+    }
+
+    @Override
     public void remove(ContactModel contactModel) throws IOException {
         mapper.writeValue(new File(CONTACTS_JSON), contactsFromJson);
     }
 
+    @Override
     public String findId() throws IOException {
         return Integer.toString(getDao().getFileData().get("contactList").size());
     }
 
+    @Override
     public JsonNode getFileData() throws IOException {
         return mapper.readTree(new FileReader(CONTACTS_JSON));
     }
-
-//    public static void writeToJson(ContactModel newContact, ObjectMapper mapper) throws IOException {
-//        mapper.writeValue(new File(CONTACTS_JSON), newContact);
-//    }
-
 
 }
 

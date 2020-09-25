@@ -9,10 +9,18 @@ import java.io.IOException;
 public interface IFileManager {
 
     void addNew(Contact contact) throws IOException;
+
     void remove(ContactModel contactModel) throws IOException;
+
     ContactModel readFile();
+
     JsonNode getFileData() throws IOException;
+
     String findId() throws IOException;
+
+    void getAllContacts();
+
+    void getAllContactAge();
 
 
 }

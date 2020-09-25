@@ -2,7 +2,6 @@ package model;
 
 import org.codehaus.plexus.util.StringUtils;
 import service.ContactService;
-import service.JsonContactDao;
 import service.RemoveNonChar;
 
 import java.io.IOException;
@@ -15,7 +14,7 @@ import static service.ContactService.removeNonAlphabetChars;
 public class Ui {
     //Giving null will not load until it is needed
     private static Ui instance = null;
-    private static ContactService contactService = ContactService.getInstance();
+    private static final ContactService contactService = ContactService.getInstance();
 
     //Constructor for Singleton Pattern
     private Ui() {
@@ -28,7 +27,9 @@ public class Ui {
     }
 
     public void getUiMenu() {
-       contactService.setInterfaceType(1);
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("1 = Run Program With JSON \n2 = Run Program With XML\n3 = Exit Program");
+        contactService.setInterfaceType(scanner.nextInt());
         showMainMenuUi();
     }
 
@@ -37,40 +38,43 @@ public class Ui {
                 "┌───── •✧✧• ─────┐\n" +
                         " -Contact Manager- \n" +
                         "└───── •✧✧• ─────┘");
-        String intro = "\n" + "1 = [ All Contacts ]\n" + "2 = [ Contacts Age ]\n" + "Exit = [ Exit ] \n" + "\n4 = [ Add Contact ] \n" + "5 = [ Delete Contact ]";
+        String intro = "\n" + "1 = [ All Contacts ]\n" + "2 = [ Contacts Age ]\n" + "\n3 = [ Add Contact ] \n" + "4 = [ Delete Contact ]\n\n" + "5 = [ Choose Data Type ] \n" + "Exit = [ Exit ] \n";
         System.out.println(intro);
         try (Scanner scanner = new Scanner(System.in)) {
             String userInput = StringUtils.capitalise(scanner.nextLine());
             switch (userInput) {
                 case "1":
-                    showContactListUi(scanner);
+                    displayAllContacts(scanner);
                     break;
 
                 case "2":
                     showContactAgeUi(scanner);
                     break;
 
+                case "3":
+                    addContactUi();
+                    break;
+
+                case "4":
+                    deleteContactUi();
+                    break;
+
+                case "5":
+                    getUiMenu();
+                    break;
+
                 case "Exit":
                     System.out.println("༼ つ ◕_◕ ༽つ You left the project, Goodbye!!");
                     System.exit(0);
                     break;
-
-                case "4":
-                    addContactUi();
-                    break;
-
-                case "5":
-                    deleteContactUi();
-                    break;
                 default:
-                    getUiMenu();
+                    showMainMenuUi();
                     break;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     public void showAddOrDeleteUi() throws IOException {
         Scanner scanner = new Scanner(System.in);
@@ -86,10 +90,10 @@ public class Ui {
                 deleteContactUi();
                 break;
             case "3":
-                showContactListUi(scanner);
+                displayAllContacts(scanner);
                 break;
             case "4":
-                getUiMenu();
+                showMainMenuUi();
                 break;
             case "5":
                 System.exit(0);
@@ -101,28 +105,14 @@ public class Ui {
     }
 
     //Working on now
-    public void showContactListUi(Scanner scanner) {
-        JsonContactDao jsonContactDao = JsonContactDao.getDao();
-        ContactModel newContact = jsonContactDao.readFile();
-        for (Contact contact : jsonContactDao.readFile().getContactList())
-            if (newContact.getContactList() == null) {
-                System.out.println("There are no contacts available");
-                break;
-            } else {
-                System.out.println("| Contact ID: " + contact.getContactId() + "\n" + contact.toString() + "\n------|");
-            }
+    // TODO: 25/09/2020 move to ContactService
+    public void displayAllContacts(Scanner scanner) {
+        contactService.getContactList();
         showExitUi(scanner);
     }
 
     public void showContactAgeUi(Scanner scanner) {
-        JsonContactDao jsonContactDao = JsonContactDao.getDao();
-        ContactModel newContact = jsonContactDao.readFile();
-        for (Contact ageOfContacts : jsonContactDao.readFile().getContactList()) {
-            if (newContact.getContactList() == null) {
-                System.out.println("There are no contacts available");
-            }
-            System.out.println("| Contact Name: " + ageOfContacts.getContactName() + "\n  Age: " + ageOfContacts.getContactAge() + "\n------|");
-        }
+        contactService.showContactAgeList();
         showExitUi(scanner);
     }
 
@@ -132,7 +122,7 @@ public class Ui {
         String inputUser = input.nextLine().toUpperCase();
         switch (inputUser) {
             case "1":
-                getUiMenu();
+                showMainMenuUi();
                 break;
             case "2":
                 System.out.println("༼ つ ◕_◕ ༽つ You are out of the project, Goodbye!!");
@@ -146,7 +136,6 @@ public class Ui {
 
     //WORKING
     public void addContactUi() throws IOException {
-
 
         var scanner = new Scanner(System.in);
         System.out.println("( ͡° ͜ʖ ͡°) Please insert the details required to add a new contact\n");
@@ -224,14 +213,14 @@ public class Ui {
                 break;
             case "2":
                 System.out.println("Progress has not been saved");
-                getUiMenu();
+                showMainMenuUi();
                 break;
         }
     }
 
     //WORKING
     public void deleteContactUi() throws IOException {
-        if (!contactService.findContactList().isEmpty()) {
+        if (!contactService.findCurrentContactId().isEmpty()) {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter  ID of Contact you want to delete");
             System.out.println("Please Enter integer numbers");
