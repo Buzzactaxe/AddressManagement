@@ -8,24 +8,25 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class ContactDao {
-    public static String CONTACTS_JSON = "C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\contactList_jackson.json";
+public class JsonContactDao implements IFileManager {
+    public static final String CONTACTS_JSON = "C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\contactList_jackson.json";
 
     ObjectMapper mapper = new ObjectMapper();
     ContactModel contactsFromJson;
     //Instance will load only when needed
-    private static ContactDao instance = null;
+    private static JsonContactDao instance = null;
 
-    private ContactDao() {
+    private JsonContactDao() {
     }
 
-    public static ContactDao getContactDoa() {
-        if (instance == null) instance = new ContactDao();
+    public static JsonContactDao getDoa() {
+        if (instance == null) instance = new JsonContactDao();
         return instance;
     }
 
+    @Override
     //Reads data from inputStream and connects to class
-    public ContactModel readJsonDao() {
+    public ContactModel read() {
         try {
             contactsFromJson = mapper.readValue(new File(CONTACTS_JSON), ContactModel.class);
         } catch (IOException e) {
@@ -34,6 +35,7 @@ public class ContactDao {
         }
         return contactsFromJson;
     }
+
 
     public static JsonNode getJsonObject() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
