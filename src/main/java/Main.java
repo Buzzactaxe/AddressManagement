@@ -5,5 +5,6 @@ public class Main {
         Ui contactManagerUi = Ui.getInstance();
 
         contactManagerUi.getUiMenu();
+
     }
 }

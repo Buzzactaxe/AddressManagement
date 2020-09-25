@@ -1,5 +1,1 @@
-{
-  "contactList": [
-
-  ]
-}
+{"contactList":[{"contactId":"0","contactName":"Sdvsd","contactSurname":"Sdfv","contactAge":"","contactAddress":{"streetName":"Asv","houseNumber":"","postCode":"","city":"Asdv"},"contactPhoneNumbers":{"housePhone":"","mobilePhone":""}},{"contactId":"1","contactName":"Valliant","contactSurname":"Lupori","contactAge":"2521","contactAddress":{"streetName":"Asf","houseNumber":"","postCode":"","city":"Av"},"contactPhoneNumbers":{"housePhone":"","mobilePhone":""}}]}
