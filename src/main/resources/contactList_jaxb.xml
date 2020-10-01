@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:contactModel xmlns:ns2="ContactData">
-    <contactManager/>
-</ns2:contactModel>
+<contactModel>
+
+</contactModel>

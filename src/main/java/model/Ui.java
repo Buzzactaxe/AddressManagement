@@ -5,6 +5,7 @@ import service.ContactService;
 import service.RemoveNonChar;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -105,14 +106,27 @@ public class Ui {
     }
 
     //Working on now
-    // TODO: 25/09/2020 move to ContactService
     public void displayAllContacts(Scanner scanner) {
-        contactService.getContactList();
+        List<Contact> contactList = contactService.getContactList();
+        if (contactList != null && !contactList.isEmpty()) {
+            for (Contact contact : contactList) {
+                System.out.println("| Contact ID: " + contact.getContactId() + "\n  Age: " + contact.toString() + "\n------|");
+            }
+        } else {
+            System.out.println("There are no contacts available");
+        }
         showExitUi(scanner);
     }
 
     public void showContactAgeUi(Scanner scanner) {
-        contactService.showContactAgeList();
+        List<Contact> contactAgeList = contactService.getContactAgeList();
+        if (contactAgeList != null && !contactAgeList.isEmpty()) {
+            for (Contact contact : contactAgeList) {
+                System.out.println("| Contact Name: " + contact.getContactName() + "\n  Age: " + contact.getContactAge() + "\n------|");
+            }
+        } else {
+            System.out.println("There are no contacts available");
+        }
         showExitUi(scanner);
     }
 
@@ -183,7 +197,8 @@ public class Ui {
 
         Address contactAddress = new Address(addStreetName, addHouseNumber, addPostCode, addCity);
         PhoneNumbers contactPhone = new PhoneNumbers(addHomePhone, addMobilePhone);
-        var id = contactService.findCurrentContactId();
+        // TODO: replace ID to correct Code
+        var id = contactService.getCurrentContactId();
         Contact contact = new Contact(addName, addSurname, addContactAge, contactAddress, contactPhone, id);
         System.out.println("\nConfirm details »»--------►\n" + contact);
         System.out.println("\n- 1: [ Add Contact]\n- 2: [ Cancel operation ]");
@@ -220,7 +235,7 @@ public class Ui {
 
     //WORKING
     public void deleteContactUi() throws IOException {
-        if (!contactService.findCurrentContactId().isEmpty()) {
+        if (!contactService.getCurrentContactId().isEmpty()) {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter  ID of Contact you want to delete");
             System.out.println("Please Enter integer numbers");

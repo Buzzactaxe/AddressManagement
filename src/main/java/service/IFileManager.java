@@ -1,26 +1,24 @@
 package service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import model.Contact;
 import model.ContactModel;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface IFileManager {
 
-    void addNew(Contact contact) throws IOException;
+    void addNew(Contact c) throws IOException;
 
-    void remove(ContactModel contactModel) throws IOException;
+    void deleteContact(ContactModel cM) throws IOException;
 
     ContactModel readFile();
 
-    JsonNode getFileData() throws IOException;
-
     String findId() throws IOException;
 
-    void getAllContacts();
+    List<Contact> findAllContacts();
 
-    void getAllContactAge();
+    List<Contact> findContactsAge();
 
 
 }

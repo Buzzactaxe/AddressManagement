@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(namespace = "ContactData")
+@XmlRootElement
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ContactModel {
 
-    @XmlElementWrapper(name = "contactManager")
-    @XmlElement(name = "contactList")
+    @XmlElementWrapper(name = "contactList")
+    @XmlElement(name = "contact")
 
     private List<Contact> contactList = new ArrayList<>();
 

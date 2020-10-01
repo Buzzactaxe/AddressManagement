@@ -26,8 +26,7 @@ public class ContactService extends RemoveNonChar {
                 ifm = new JsonDao();
                 break;
             case 2:
-                // TODO Add xml when implemented
-                System.out.println("Program in XL will come here");
+                ifm = new XmlDao();
                 break;
             case 3:
                 System.out.println("Nothing, your out");
@@ -38,30 +37,29 @@ public class ContactService extends RemoveNonChar {
         }
     }
 
-    //Adds contact from Ui to database
+
     public void addContact(Contact contact) throws IOException {
-        ContactModel newContact = ifm.readFile();
-        newContact.addToContactList(contact);
         ifm.addNew(contact);
     }
 
-    public String findCurrentContactId() throws IOException {
+    public String getCurrentContactId() throws IOException {
         return ifm.findId();
     }
 
-    public void getContactList() {
-        ifm.getAllContacts();
+    public List<Contact> getContactList() {
+        return ifm.findAllContacts();
     }
 
-    public void showContactAgeList() {
-        ifm.getAllContactAge();
+    public List<Contact> getContactAgeList() {
+
+        return ifm.findContactsAge();
     }
 
     public void deleteIdFromList(String customerId) throws IOException {
         var contactList = deleteContactId(customerId);
         ContactModel newContact = ifm.readFile();
         newContact.setContactList(contactList);
-        ifm.remove(newContact);
+        ifm.deleteContact(newContact);
     }
 
     public List<Contact> deleteContactId(String customerId) {
@@ -73,7 +71,5 @@ public class ContactService extends RemoveNonChar {
         }
         return contactList;
     }
-
-
 }
 

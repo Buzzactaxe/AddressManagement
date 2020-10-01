@@ -3,29 +3,33 @@ package model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-
-@XmlType(propOrder = {
-        "contactName",
-        "contactSurname",
-        "contactAge",
-        "contactAddress",
-        "contactId",
-        "contactPhoneNumbers"
-})
-
-@JsonIgnoreProperties(ignoreUnknown = true)
+@XmlRootElement(name = "contact")
 public class Contact {
-    private String contactName;
-    private String contactSurname;
-    private String contactAge;
-    private Address contactAddress;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @XmlElement(name = "id")
     private String contactId;
+
+    @XmlElement(name = "name")
+    private String contactName;
+
+    @XmlElement(name = "surname")
+    private String contactSurname;
+
+    @XmlElement(name = "age")
+    private String contactAge;
+
+    @XmlElement(name = "Address")
+    private Address contactAddress;
+
+    @XmlElement(name = "PhoneNumbers")
     private PhoneNumbers contactPhoneNumbers;
+
+    public Contact() {
+    }
 
     public Contact(@JsonProperty("name") String contactName,
                    @JsonProperty("surname") String contactSurname,
@@ -41,26 +45,24 @@ public class Contact {
         this.contactPhoneNumbers = contactPhoneNumbers;
     }
 
-
-    public String getContactAge() {
-        return contactAge;
-    }
-
-    public void printContactId() {
-        System.out.println(this.contactId);
-    }
-
-    public void setContactAge(String contactAge) {
-        this.contactAge = contactAge;
-    }
-
-
     public String getContactId() {
         return contactId;
     }
 
     public void setCustomerID(String contactId) {
         this.contactId = contactId;
+    }
+
+    public void printContactId() {
+        System.out.println(this.contactId);
+    }
+
+    public String getContactAge() {
+        return contactAge;
+    }
+
+    public void setContactAge(String contactAge) {
+        this.contactAge = contactAge;
     }
 
     public String getContactName() {

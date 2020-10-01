@@ -1,81 +1,66 @@
 package service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.Contact;
 import model.ContactModel;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 public class JsonDao implements IFileManager {
     public static final String CONTACTS_JSON = "C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\contactList_jackson.json";
 
     ObjectMapper mapper = new ObjectMapper();
-    ContactModel contactsFromJson;
     //Instance will load only when needed
     private static JsonDao instance = null;
 
     JsonDao() {
     }
 
-    public static JsonDao getDao() {
+    public static JsonDao getInstance() {
         if (instance == null) instance = new JsonDao();
         return instance;
     }
 
     @Override
-    public void addNew(Contact contact) throws IOException {
-        mapper.writeValue(new File(CONTACTS_JSON), contactsFromJson);
+    public void addNew(Contact c) throws IOException {
+        ContactModel contactModel = readFile();
+        contactModel.addToContactList(c);
+        mapper.writeValue(new File(CONTACTS_JSON), contactModel);
     }
 
     @Override
     //Reads data from inputStream and connects to class
     public ContactModel readFile() {
         try {
-            contactsFromJson = mapper.readValue(new File(CONTACTS_JSON), ContactModel.class);
+            return mapper.readValue(new File(CONTACTS_JSON), ContactModel.class);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Cant read json file");
         }
-        return contactsFromJson;
+        return null;
     }
 
     @Override
-    public void getAllContacts() {
-        for (Contact contact : readFile().getContactList())
-            if (contactsFromJson.getContactList().isEmpty()) {
-                System.out.println("There are no contacts available");
-                break;
-            } else {
-                System.out.println("| Contact ID: " + contact.getContactId() + "\n" + contact.toString() + "\n------|");
-            }
+    public List<Contact> findAllContacts() {
+        return readFile().getContactList();
     }
 
     @Override
-    public void getAllContactAge() {
-        for (Contact ageOfContacts : readFile().getContactList()) {
-            if (contactsFromJson.getContactList() == null) {
-                System.out.println("There are no contacts available");
-            }
-            System.out.println("| Contact Name: " + ageOfContacts.getContactName() + "\n  Age: " + ageOfContacts.getContactAge() + "\n------|");
-        }
+    public List<Contact> findContactsAge() {
+        return readFile().getContactList();
     }
 
     @Override
-    public void remove(ContactModel contactModel) throws IOException {
-        mapper.writeValue(new File(CONTACTS_JSON), contactsFromJson);
+    public void deleteContact(ContactModel c) throws IOException {
+        mapper.writeValue(new File(CONTACTS_JSON), c);
     }
 
     @Override
-    public String findId() throws IOException {
-        return Integer.toString(getDao().getFileData().get("contactList").size());
-    }
-
-    @Override
-    public JsonNode getFileData() throws IOException {
-        return mapper.readTree(new FileReader(CONTACTS_JSON));
+    public String findId() {
+        int contactId = readFile().getContactList().size();
+        return Integer.toString(contactId);
     }
 
 }
