@@ -10,7 +10,7 @@ public interface IFileManager {
 
     void addNew(Contact c) throws IOException;
 
-    void deleteContact(ContactModel cM) throws IOException;
+    void saveAll(ContactModel cM) throws IOException;
 
     ContactModel readFile();
 
@@ -18,7 +18,6 @@ public interface IFileManager {
 
     List<Contact> findAllContacts();
 
-    List<Contact> findContactsAge();
 
 
 }

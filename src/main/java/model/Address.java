@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Address {
+
     private String streetName;
     private String houseNumber;
     private String postCode;
@@ -28,7 +29,6 @@ public class Address {
         this.city = city;
     }
 
-    //@XmlElement(name = "streetName")
     public String getStreetName() {
         return streetName;
     }
@@ -36,7 +36,7 @@ public class Address {
     public void setStreetName(String streetName) {
         this.streetName = streetName;
     }
-    //@XmlElement(name = "houseNumber")
+
     public String getHouseNumber() {
         return houseNumber;
     }
@@ -44,7 +44,7 @@ public class Address {
     public void setHouseNumber(String houseNumber) {
         this.houseNumber = houseNumber;
     }
-    //@XmlElement(name = "postCode")
+
     public String getPostCode() {
         return postCode;
     }
@@ -52,7 +52,7 @@ public class Address {
     public void setPostCode(String postCode) {
         this.postCode = postCode;
     }
-    //@XmlElement(name = "city")
+
     public String getCity() {
         return city;
     }

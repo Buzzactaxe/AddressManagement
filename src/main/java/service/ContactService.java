@@ -50,16 +50,12 @@ public class ContactService extends RemoveNonChar {
         return ifm.findAllContacts();
     }
 
-    public List<Contact> getContactAgeList() {
-
-        return ifm.findContactsAge();
-    }
 
     public void deleteIdFromList(String customerId) throws IOException {
         var contactList = deleteContactId(customerId);
         ContactModel newContact = ifm.readFile();
         newContact.setContactList(contactList);
-        ifm.deleteContact(newContact);
+        ifm.saveAll(newContact);
     }
 
     public List<Contact> deleteContactId(String customerId) {

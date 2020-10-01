@@ -119,7 +119,7 @@ public class Ui {
     }
 
     public void showContactAgeUi(Scanner scanner) {
-        List<Contact> contactAgeList = contactService.getContactAgeList();
+        List<Contact> contactAgeList = contactService.getContactList();
         if (contactAgeList != null && !contactAgeList.isEmpty()) {
             for (Contact contact : contactAgeList) {
                 System.out.println("| Contact Name: " + contact.getContactName() + "\n  Age: " + contact.getContactAge() + "\n------|");

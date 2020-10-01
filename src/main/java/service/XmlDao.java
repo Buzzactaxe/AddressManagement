@@ -44,7 +44,7 @@ public class XmlDao implements IFileManager {
     }
 
     @Override
-    public void deleteContact(ContactModel c) {
+    public void saveAll(ContactModel c) {
 
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(ContactModel.class);
@@ -78,12 +78,6 @@ public class XmlDao implements IFileManager {
 
     @Override
     public List<Contact> findAllContacts() {
-        return readFile().getContactList();
-    }
-
-    @Override
-    public List<Contact> findContactsAge() {
-
         return readFile().getContactList();
     }
 }

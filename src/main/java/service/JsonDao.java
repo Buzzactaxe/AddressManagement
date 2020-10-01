@@ -48,12 +48,7 @@ public class JsonDao implements IFileManager {
     }
 
     @Override
-    public List<Contact> findContactsAge() {
-        return readFile().getContactList();
-    }
-
-    @Override
-    public void deleteContact(ContactModel c) throws IOException {
+    public void saveAll(ContactModel c) throws IOException {
         mapper.writeValue(new File(CONTACTS_JSON), c);
     }
 
