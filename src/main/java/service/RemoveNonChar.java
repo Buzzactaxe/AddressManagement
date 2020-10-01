@@ -11,9 +11,11 @@ public class RemoveNonChar {
      *
      */
     public static String removeNonAlphabetChars(String userInput) {
-        String availableChars = "1234567890.-/_";
-        StringBuilder output = new StringBuilder();
-        for (char c : userInput.toCharArray()) {
+        var availableChars = "1234567890.-/_";
+        var output = new StringBuilder();
+        char[] charArray = userInput.toCharArray();
+        for (int i = 0, charArrayLength = charArray.length; i < charArrayLength; i++) {
+            char c = charArray[i];
             if (!availableChars.contains("" + c)) {
                 output.append(c);
             }
@@ -23,9 +25,11 @@ public class RemoveNonChar {
 
     //removes alphabetical letters from user input
     public static String removeAlphabetChars(String userInput) {
-        String availableChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-/_";
+        var availableChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-/_";
         StringBuilder output = new StringBuilder();
-        for (char c : userInput.toCharArray()) {
+        char[] charArray = userInput.toCharArray();
+        for (int i = 0, charArrayLength = charArray.length; i < charArrayLength; i++) {
+            char c = charArray[i];
             if (!availableChars.contains("" + c)) {
                 output.append(c);
             }
