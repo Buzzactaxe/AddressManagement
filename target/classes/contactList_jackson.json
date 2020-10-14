@@ -1,1 +1,36 @@
-{"contactList":[]}
+{
+  "contactList": [
+    {
+      "contactId": 1,
+      "contactName": "Valliant",
+      "contactSurname": "Lupori",
+      "contactAge": "",
+      "contactAddress": {
+        "streetName": "Sva",
+        "houseNumber": "",
+        "postCode": "",
+        "city": ""
+      },
+      "contactPhoneNumbers": {
+        "housePhone": "",
+        "mobilePhone": ""
+      }
+    },
+    {
+      "contactId": 2,
+      "contactName": "Denise ",
+      "contactSurname": "Blasberhg",
+      "contactAge": "32",
+      "contactAddress": {
+        "streetName": "",
+        "houseNumber": "",
+        "postCode": "",
+        "city": ""
+      },
+      "contactPhoneNumbers": {
+        "housePhone": "",
+        "mobilePhone": "32434432324"
+      }
+    }
+  ]
+}

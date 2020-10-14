@@ -10,16 +10,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
 
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PhoneNumbers {
     private String housePhone;
     private String mobilePhone;
 
-    public PhoneNumbers() {}
+    public PhoneNumbers() {
+    }
+
     public PhoneNumbers(@JsonProperty("housePhone") String housePhone, @JsonProperty("mobilePhone") String mobilePhone) {
         this.housePhone = housePhone;
         this.mobilePhone = mobilePhone;
-
     }
 
     //@XmlElement(name = "housePhone")
@@ -35,11 +37,6 @@ public class PhoneNumbers {
     public String getMobilePhone() {
         return mobilePhone;
     }
-
-    public void setMobilePhone(String mobilePhone) {
-        this.mobilePhone = mobilePhone;
-    }
-
 
     @Override
     public String toString() {

@@ -6,16 +6,12 @@ public class RemoveNonChar {
 
     /**
      * removes all non alphabetical characters from string
-     *
-     * @param userInput
-     *
      */
     public static String removeNonAlphabetChars(String userInput) {
         var availableChars = "1234567890.-/_";
         var output = new StringBuilder();
         char[] charArray = userInput.toCharArray();
-        for (int i = 0, charArrayLength = charArray.length; i < charArrayLength; i++) {
-            char c = charArray[i];
+        for (char c : charArray) {
             if (!availableChars.contains("" + c)) {
                 output.append(c);
             }
@@ -28,8 +24,7 @@ public class RemoveNonChar {
         var availableChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-/_";
         StringBuilder output = new StringBuilder();
         char[] charArray = userInput.toCharArray();
-        for (int i = 0, charArrayLength = charArray.length; i < charArrayLength; i++) {
-            char c = charArray[i];
+        for (char c : charArray) {
             if (!availableChars.contains("" + c)) {
                 output.append(c);
             }

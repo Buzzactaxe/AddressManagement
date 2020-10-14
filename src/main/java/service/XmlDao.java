@@ -10,7 +10,9 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
+
 
 public class XmlDao implements IFileManager {
 
@@ -21,6 +23,11 @@ public class XmlDao implements IFileManager {
     }
 
     File JAXB_XML_FILE = new File("C:\\Users\\ffsamuellupori\\AddressManagement\\src\\main\\resources\\contactList_jaxb.xml");
+
+    public static XmlDao getDao() {
+        if (instance == null) instance = new XmlDao();
+        return instance;
+    }
 
     @Override
     public void addNew(Contact c) {
@@ -38,14 +45,8 @@ public class XmlDao implements IFileManager {
         }
     }
 
-    public static XmlDao getDao() {
-        if (instance == null) instance = new XmlDao();
-        return instance;
-    }
-
     @Override
     public void saveAll(ContactModel c) {
-
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(ContactModel.class);
             Marshaller m = jaxbContext.createMarshaller();
@@ -71,13 +72,20 @@ public class XmlDao implements IFileManager {
     }
 
     @Override
-    public String findId() {
-        int contactId = readFile().getContactList().size();
-        return Integer.toString(contactId);
+    public Integer findId() {
+        if (readFile().getContactList() != null) {
+            return readFile().getContactList().size();
+        }
+        return 0;
     }
 
     @Override
     public List<Contact> findAllContacts() {
-        return readFile().getContactList();
+        try{
+          return readFile().getContactList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
     }
 }

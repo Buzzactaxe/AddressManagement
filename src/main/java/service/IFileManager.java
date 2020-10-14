@@ -14,10 +14,8 @@ public interface IFileManager {
 
     ContactModel readFile();
 
-    String findId() throws IOException;
+    Integer findId() throws IOException;
 
     List<Contact> findAllContacts();
-
-
 
 }

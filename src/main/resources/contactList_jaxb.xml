@@ -1,21 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <contactModel>
-    <contactList>
-        <contact>
-            <id>0</id>
-            <name>Valliant</name>
-            <surname>Lupori</surname>
-            <age>32</age>
-            <Address>
-                <streetName>Aewg</streetName>
-                <houseNumber></houseNumber>
-                <postCode></postCode>
-                <city></city>
-            </Address>
-            <PhoneNumbers>
-                <housePhone></housePhone>
-                <mobilePhone></mobilePhone>
-            </PhoneNumbers>
-        </contact>
-    </contactList>
+
 </contactModel>

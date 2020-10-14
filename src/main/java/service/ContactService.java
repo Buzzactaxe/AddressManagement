@@ -6,6 +6,7 @@ import model.ContactModel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ContactService extends RemoveNonChar {
     //Giving null will not load until it is needed
@@ -29,27 +30,25 @@ public class ContactService extends RemoveNonChar {
                 ifm = new XmlDao();
                 break;
             case 3:
-                System.out.println("Nothing, your out");
+                System.out.println("Your out of the program");
                 System.exit(0);
                 break;
             default:
-                System.exit(0);
+                setInterfaceType(3);
         }
     }
-
 
     public void addContact(Contact contact) throws IOException {
         ifm.addNew(contact);
     }
 
-    public String getCurrentContactId() throws IOException {
+    public Integer getCurrentContactId() throws IOException {
         return ifm.findId();
     }
 
     public List<Contact> getContactList() {
         return ifm.findAllContacts();
     }
-
 
     public void deleteIdFromList(String customerId) throws IOException {
         var contactList = deleteContactId(customerId);
@@ -58,14 +57,27 @@ public class ContactService extends RemoveNonChar {
         ifm.saveAll(newContact);
     }
 
+    // Old function also not working well
     public List<Contact> deleteContactId(String customerId) {
         List<Contact> contactList = new ArrayList<>();
         for (Contact contact : ifm.readFile().getContactList()) {
-            if (!contact.getContactId().equals(customerId)) {
+            if (!contact.getContactId().toString().equals(customerId)) {
                 contactList.add(contact);
             }
         }
         return contactList;
     }
+
+    public Optional<Contact> findById(String customerId) {
+        var contactFound = getContactList();
+        for(Contact contact : contactFound){
+            if(contact.getContactId().toString().equals(customerId)){
+                return Optional.of(contact);
+            }
+        }
+        return Optional.empty();
+    }
+
+
 }
 

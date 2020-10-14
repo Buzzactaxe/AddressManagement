@@ -16,10 +16,10 @@ public class ContactModel {
 
     private List<Contact> contactList = new ArrayList<>();
 
-
     public List<Contact> getContactList() {
         return contactList;
     }
+
 
     public void addToContactList(Contact contact) {
         contactList.add(contact);

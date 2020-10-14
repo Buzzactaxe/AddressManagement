@@ -3,7 +3,10 @@ package model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "contact")
@@ -11,7 +14,7 @@ public class Contact {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @XmlElement(name = "id")
-    private String contactId;
+    private Integer contactId;
 
     @XmlElement(name = "name")
     private String contactName;
@@ -36,7 +39,7 @@ public class Contact {
                    @JsonProperty("age") String contactAge,
                    @JsonProperty("address") Address contactAddress,
                    @JsonProperty("phoneNumbers") PhoneNumbers contactPhoneNumbers,
-                   @JsonProperty("contactId") String contactId) {
+                   @JsonProperty("contactId") Integer contactId) {
         this.contactName = contactName;
         this.contactSurname = contactSurname;
         this.contactAddress = contactAddress;
@@ -45,11 +48,11 @@ public class Contact {
         this.contactPhoneNumbers = contactPhoneNumbers;
     }
 
-    public String getContactId() {
+    public Integer getContactId() {
         return contactId;
     }
 
-    public void setCustomerID(String contactId) {
+    public void setCustomerID(Integer contactId) {
         this.contactId = contactId;
     }
 
@@ -100,5 +103,6 @@ public class Contact {
     @Override
     public String toString() {
         return String.format("유 Name: %s \n  Surname: %s \n  Age: %s \n    ╦╣ Address: %s \n     ☏ Phone Numbers:%s", getContactName(), getContactSurname(), getContactAge(), getContactAddress(), getContactPhoneNumbers());
+
     }
 }
