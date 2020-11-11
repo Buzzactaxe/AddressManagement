@@ -28,7 +28,7 @@ public class Ui {
 
     public void getUiMenu() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("1 = Run Program With JSON \n2 = Run Program With XML\n3 = Exit Program");
+        System.out.println("1 = Run Program With JSON \n2 = Run Program With XML\n3 = Run Program With DataBase\n4 = Exit Program");
         contactService.setInterfaceType(scanner.nextInt());
         showMainMenuUi();
     }
@@ -222,11 +222,12 @@ public class Ui {
 
         Address contactAddress = new Address(addStreetName, addHouseNumber, addPostCode, addCity);
         PhoneNumbers contactPhone = new PhoneNumbers(addHomePhone, addMobilePhone);
-        var nextId = contactService.getCurrentContactId() + 1;
-        Contact contact = new Contact(addName, addSurname, addContactAge, contactAddress, contactPhone, nextId);
+//        var nextId = contactService.getCurrentContactId() + 1;
+//        Contact contact = new Contact(addName, addSurname, addContactAge, contactAddress, contactPhone, nextId);
+        Contact contact = new Contact(addName, addSurname, addContactAge, contactAddress, contactPhone);
         System.out.println("\nConfirm details »»--------►\n" + contact);
         System.out.println("\n- 1: [ Add Contact]\n- 2: [ Cancel operation ]");
-        System.out.println(contact.getContactId());
+//        System.out.println(contact.getContactId());
         switch (scanner.nextLine()) {
             case "1":
                 contactService.addContact(contact);

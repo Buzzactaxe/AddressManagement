@@ -30,6 +30,9 @@ public class ContactService extends RemoveNonChar {
                 ifm = new XmlDao();
                 break;
             case 3:
+                ifm = new MySqlDao();
+                break;
+            case 4:
                 System.out.println("Your out of the program");
                 System.exit(0);
                 break;

@@ -48,6 +48,14 @@ public class Contact {
         this.contactPhoneNumbers = contactPhoneNumbers;
     }
 
+    public Contact(String contactName, String contactSurname, String contactAge, Address address, PhoneNumbers phoneNumbers) {
+        this.contactName = contactName;
+        this.contactSurname = contactSurname;
+        this.contactAge = contactAge;
+        this.contactAddress = address;
+        this.contactPhoneNumbers = phoneNumbers;
+    }
+
     public Integer getContactId() {
         return contactId;
     }

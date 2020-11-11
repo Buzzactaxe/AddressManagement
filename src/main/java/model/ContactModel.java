@@ -20,7 +20,6 @@ public class ContactModel {
         return contactList;
     }
 
-
     public void addToContactList(Contact contact) {
         contactList.add(contact);
     }
